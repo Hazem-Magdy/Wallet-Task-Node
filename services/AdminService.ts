@@ -1,6 +1,7 @@
 import { Sequelize, FindOptions } from "sequelize";
 import { User } from "../models/user";
 const { transactionModel, userModel } = require("../Helpers/DataBaseConnection");
+
 class AdminService {
   private sequelizeInstance: Sequelize;
 
