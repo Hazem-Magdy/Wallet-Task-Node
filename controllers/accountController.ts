@@ -55,6 +55,8 @@ async function register(req: Request, res: Response) {
       Message: "An error occurred.",
     });
   }
+  
 }
 
 export { login, register };
+ 

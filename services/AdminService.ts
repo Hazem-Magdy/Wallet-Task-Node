@@ -1,5 +1,6 @@
 import { Sequelize, FindOptions } from "sequelize";
 import { User } from "../models/user";
+
 const { transactionModel, userModel } = require("../Helpers/DataBaseConnection");
 
 class AdminService {
@@ -40,3 +41,4 @@ class AdminService {
 }
 
 export default AdminService;
+

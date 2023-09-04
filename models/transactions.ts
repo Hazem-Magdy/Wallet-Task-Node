@@ -9,12 +9,6 @@ export class Transaction extends sequelizeModel {
         primaryKey: true,
         autoIncrement: true,
       },
-      name: { 
-        type: DataTypes.STRING,
-        validate: {
-          is: /^[a-zA-Z]+$/
-        }
-      },
       mobile: { 
         type: DataTypes.STRING,
         validate: {

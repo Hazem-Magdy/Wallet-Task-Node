@@ -1,12 +1,14 @@
 import { Sequelize } from 'sequelize';
 import{ Transaction } from '../models/transactions';
 import{ User } from '../models/user';
+import{ country } from '../models/country';
 
 
 const sequelize = new Sequelize("WalletDB", "postgres", "0502349611", {
   host: "localhost",
   port: 5432,
   dialect: "postgres",
+  logging: console.log,
 });
 
 const transactionModel = sequelize.define(
@@ -21,21 +23,14 @@ const userModel = sequelize.define(
   new User().getOptions()
 );
 
+const countryModel = sequelize.define(
+  "Country",
+  new country().getAttributes(sequelize.Sequelize),
+  new country().getOptions()
+);
 
-export { sequelize, transactionModel, userModel };
+export { sequelize, transactionModel, userModel , countryModel };
 
-
-
-// const globalProperties = {
-//   mySequelize: sequelize,
-//   myTransactionModel: transactionModel,
-//   myUserModel: userModel,
-// };
-
-// // Assign your global properties to the global object
-// Object.assign(global, globalProperties);
-
-// export { sequelize, transactionModel, userModel };
 
 
 
