@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Utilservice_1 = require("./Utilservice");
 const { transactionModel, userModel } = require("../Helpers/DataBaseConnection");
 class AdminService {
     constructor(sequelizeInstance) {
@@ -18,8 +17,6 @@ class AdminService {
     getBalanceReportAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const UtilService = new Utilservice_1.Utilservice();
-                console.log(UtilService.add(10, 20));
                 const balanceReports = yield userModel.findAll({
                     attributes: ["mobile", "name"],
                     include: [

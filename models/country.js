@@ -17,9 +17,6 @@ class country extends ts_sequelize_models_1.sequelizeModel {
             nameEn: {
                 type: DataTypes.STRING,
             },
-            nameFr: {
-                type: DataTypes.STRING,
-            },
             nameAr: {
                 type: DataTypes.STRING,
             }

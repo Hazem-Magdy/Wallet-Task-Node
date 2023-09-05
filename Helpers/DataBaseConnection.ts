@@ -3,7 +3,6 @@ import{ Transaction } from '../models/transactions';
 import{ User } from '../models/user';
 import{ country } from '../models/country';
 
-
 const sequelize = new Sequelize("WalletDB", "postgres", "0502349611", {
   host: "localhost",
   port: 5432,

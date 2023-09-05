@@ -19,9 +19,6 @@ export class country extends sequelizeModel {
             nameEn: {
                 type: DataTypes.STRING,
             },
-            nameFr: {
-                type: DataTypes.STRING,
-            },
             nameAr: {
                 type: DataTypes.STRING,
             }
