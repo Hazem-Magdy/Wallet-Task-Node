@@ -8,42 +8,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CountryController = void 0;
-const language_1 = require("../enums/language");
-const DataBaseConnection_1 = require("../Helpers/DataBaseConnection");
+const DataBaseConnection_1 = require("../../Helpers/DataBaseConnection");
 class CountryController {
+    // async getAllCountries(req: Request, res: Response) {
+    //     let countries = await countryModel.findAll({ raw: true })
+    //     let language = req.headers.language ? req.headers.language.toString() : "ar";
+    //     countries.map(item => item.name = language === Language.AR ? item.nameAr : item.nameEn)
+    //     let result = countries.map(({ nameAr, nameEn, ...items }) => items);
+    //     if (result.length > 0) {
+    //         console.log()
+    //         return res.send({ status: 200, result: result });
+    //     }
+    //     else {
+    //         let response = {
+    //             isSuccess: false,
+    //             //error: new TrxHelpers().handleErrorResponseMessage(UtilService.translate('no_Countries')),
+    //             error:"No countries available."
+    //         };
+    //         return res.status(400).send(response);
+    //     }
+    // }
     getAllCountries(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            let countries = yield DataBaseConnection_1.countryModel.findAll({ raw: true });
-            let language = req.headers.language ? req.headers.language.toString() : "ar";
-            countries.map(item => item.name = language === language_1.Language.AR ? item.nameAr : item.nameEn);
-            let result = countries.map((_a) => {
-                var { nameAr, nameEn } = _a, items = __rest(_a, ["nameAr", "nameEn"]);
-                return items;
-            });
-            if (result.length > 0) {
-                console.log();
-                return res.send({ status: 200, result: result });
+            try {
+                const countries = yield DataBaseConnection_1.countryModel.findAll({ raw: true });
+                if (countries.length > 0) {
+                    return res.status(200).json({ isSuccess: true, result: countries });
+                }
+                else {
+                    return res.status(400).json({ isSuccess: false, error: "No countries available." });
+                }
             }
-            else {
-                let response = {
-                    isSuccess: false,
-                    //error: new TrxHelpers().handleErrorResponseMessage(UtilService.translate('no_Countries')),
-                    error: "No countries available."
-                };
-                return res.status(400).send(response);
+            catch (error) {
+                console.error(error);
+                return res.status(500).json({ isSuccess: false, error: "Internal Server Error" });
             }
         });
     }

@@ -1,13 +1,33 @@
 import { Request, Response, NextFunction } from "express";
 
-function checkUser(req: Request, res: Response, next: NextFunction) {
-  const token = req.headers.authorization;
+type MiddlewareFunction = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => void;
 
-  if (!token) {
-    return res.status(401).json({ message: "Token not provided" });
+export const checkUser: MiddlewareFunction = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token = req.headers.authorization;
+    console.log("checkUser middleware .............");
+    if (!token) {
+      console.log("checkUser middleware error.............");
+      return res.status(401).json({ message: "Token not provided" });
+    }
+    console.log("checkUser middleware finish.............");
+    next();
+  } catch (error) {
   }
-
+};
+export const testMiddleware: MiddlewareFunction = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log("Testing middleware .............");
   next();
-}
-
-export default checkUser;
+};
