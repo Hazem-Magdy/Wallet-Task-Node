@@ -51,3 +51,4 @@ class UserRepository {
     }
 }
 exports.default = UserRepository;
+//# sourceMappingURL=UserRepository%20.js.map

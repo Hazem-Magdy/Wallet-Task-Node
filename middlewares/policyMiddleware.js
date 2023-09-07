@@ -1,6 +1,4 @@
 "use strict";
-// import { Request, Response, NextFunction } from "express";
-// import { policies } from "../policies/policies";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -17,46 +15,58 @@ const applyPolicy = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     const urlParts = req.url.split("/").filter((part) => part !== "");
     const controllerName = urlParts[0] + "Controller";
     const methodName = urlParts[1];
-    console.log(controllerName);
-    console.log(methodName);
     try {
-        // apply policies for specific methods in the specific Controller
-        if (policies_1.policies[controllerName] && policies_1.policies[controllerName][methodName]) {
-            console.log("apply policies for specific methods in the specific Controller");
-            const middlewareArray = policies_1.policies[controllerName][methodName];
-            if (middlewareArray.length > 0) {
-                // Chain middlewares sequentially using async/await
-                for (const middleware of middlewareArray) {
-                    yield middleware(req, res, next);
-                }
-            }
-            else {
-                next();
-            }
-        }
-        // apply policies for all methods in the same Controller
-        else if (policies_1.policies[controllerName] && policies_1.policies[controllerName]["*"]) {
-            console.log("apply policies for controller name and *");
-            const middlewareArray = policies_1.policies[controllerName]["*"];
-            if (middlewareArray.length > 0) {
-                // Chain middlewares sequentially using async/await
-                for (const middleware of middlewareArray) {
-                    yield middleware(req, res, next);
-                }
-            }
-            else {
-                next();
-            }
-        }
         // apply policies for all methods
-        else if (policies_1.policies["*"] && policies_1.policies["*"]["*"]) {
+        if (policies_1.policies["*"] && policies_1.policies["*"]["*"]) {
             console.log("apply policies for all methods **");
             const middlewareArray = policies_1.policies["*"]["*"];
             if (middlewareArray.length > 0) {
-                // Chain middlewares sequentially using async/await
+                // Chain middlewares sequentially
                 for (const middleware of middlewareArray) {
-                    yield middleware(req, res, next);
+                    let result = yield middleware(req, res, next);
+                    if (result && !result.isSucces) {
+                        return res.status(400).send({ message: result.message });
+                    }
+                    else {
+                        continue;
+                    }
                 }
+            }
+        }
+        //check the other conditions
+        if (policies_1.policies[controllerName] && policies_1.policies[controllerName][methodName]) {
+            const middlewareArray = policies_1.policies[controllerName][methodName];
+            if (middlewareArray.length > 0) {
+                // Chain middlewares sequentially
+                for (const middleware of middlewareArray) {
+                    let result = yield middleware(req, res, next);
+                    if (result && !result.isSucces) {
+                        return res.status(400).send({ message: result.message });
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                next();
+            }
+            else {
+                next();
+            }
+        }
+        else if (policies_1.policies[controllerName] && policies_1.policies[controllerName]["*"]) {
+            const middlewareArray = policies_1.policies[controllerName]["*"];
+            if (middlewareArray.length > 0) {
+                // Chain middlewares sequentially
+                for (const middleware of middlewareArray) {
+                    let result = yield middleware(req, res, next);
+                    if (result && !result.isSucces) {
+                        return res.status(400).send({ message: result.message });
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                next();
             }
             else {
                 next();
@@ -64,13 +74,12 @@ const applyPolicy = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         }
         else {
             // no policies
-            console.log("no policies");
             next();
         }
     }
     catch (error) {
-        // Handle any errors that occur during middleware execution
         next(error);
     }
 });
 exports.applyPolicy = applyPolicy;
+//# sourceMappingURL=policyMiddleware.js.map

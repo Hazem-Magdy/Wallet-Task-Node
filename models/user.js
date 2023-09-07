@@ -45,3 +45,4 @@ class User extends ts_sequelize_models_1.sequelizeModel {
     }
 }
 exports.User = User;
+//# sourceMappingURL=user.js.map

@@ -18,3 +18,4 @@ const userModel = sequelize.define("User", new user_1.User().getAttributes(seque
 exports.userModel = userModel;
 const countryModel = sequelize.define("Country", new country_1.country().getAttributes(sequelize.Sequelize), new country_1.country().getOptions());
 exports.countryModel = countryModel;
+//# sourceMappingURL=DataBaseConnection.js.map

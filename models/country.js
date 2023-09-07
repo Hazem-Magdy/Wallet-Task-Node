@@ -29,3 +29,4 @@ class country extends ts_sequelize_models_1.sequelizeModel {
     }
 }
 exports.country = country;
+//# sourceMappingURL=country.js.map

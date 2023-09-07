@@ -11,6 +11,7 @@ const transactionService = new TransactionService(userRepository, transactionRep
 
 async function transfer(req: Request, res: Response) {
   try {
+    console.log("Enter transfer Callback function...............");
     const { senderMobile, receiverMobile, amount } = req.body;
 
     const senderUser: IUser | null = await userRepository.getUserByMobileAsync(senderMobile);
@@ -27,8 +28,10 @@ async function transfer(req: Request, res: Response) {
     const transferSuccess = await transactionService.transferBalance(senderUser, receiverUser, amount);
 
     if (transferSuccess) {
+      console.log('Balance transfer successful.')
       return res.status(200).json({ message: 'Balance transfer successful.' });
     } else {
+      console.log('An error occurred during balance transfer.')
       return res.status(500).json({ message: 'An error occurred during balance transfer.' });
     }
   } catch (error) {

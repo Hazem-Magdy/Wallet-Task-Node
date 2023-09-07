@@ -73,3 +73,4 @@ function register(req, res) {
     });
 }
 exports.register = register;
+//# sourceMappingURL=accountController.js.map

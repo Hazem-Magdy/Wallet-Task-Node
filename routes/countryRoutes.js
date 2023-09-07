@@ -16,3 +16,4 @@ router.post('/create', (req, res) => {
     countryControllerInstance.createCountry(req, res);
 });
 exports.default = router;
+//# sourceMappingURL=countryRoutes.js.map

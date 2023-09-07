@@ -9,24 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testMiddleware = exports.checkUser = void 0;
+exports.testMiddleware2 = exports.testMiddleware1 = exports.checkUser = void 0;
 const checkUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const token = req.headers.authorization;
-        console.log("checkUser middleware .............");
         if (!token) {
-            console.log("checkUser middleware error.............");
-            return res.status(401).json({ message: "Token not provided" });
+            return ({ isSucces: false, message: "Token not provided" });
         }
-        console.log("checkUser middleware finish.............");
-        next();
     }
-    catch (error) {
-    }
+    catch (error) { }
 });
 exports.checkUser = checkUser;
-const testMiddleware = (req, res, next) => {
-    console.log("Testing middleware .............");
-    next();
+const testMiddleware1 = (req, res, next) => {
+    console.log("Testing middleware1 .............");
 };
-exports.testMiddleware = testMiddleware;
+exports.testMiddleware1 = testMiddleware1;
+const testMiddleware2 = (req, res, next) => {
+    console.log("Testing middleware2 .............");
+};
+exports.testMiddleware2 = testMiddleware2;
+//# sourceMappingURL=authMiddleware.js.map

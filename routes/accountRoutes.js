@@ -33,3 +33,4 @@ const accountController = __importStar(require("../controllers/accountController
 router.post('/login', accountController.login);
 router.post('/register', accountController.register);
 exports.default = router;
+//# sourceMappingURL=accountRoutes.js.map

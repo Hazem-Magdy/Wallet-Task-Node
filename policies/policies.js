@@ -1,14 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.policies = void 0;
-const authMiddleware_1 = require("../middlewares/authMiddleware");
 const policies = {
     "*": {
-        "*": [],
+    //"*": [checkUser],
     },
     WalletController: {
-        "*": [],
-        transfer: [authMiddleware_1.checkUser, authMiddleware_1.testMiddleware],
+    //"*": [checkUser],
+    //transfer: [checkUser,testMiddleware1,testMiddleware2],
     },
+    AccountController: {
+    //"*": [checkUser],
+    //login:[checkUser,testMiddleware1],
+    //register:[checkUser,testMiddleware1,testMiddleware2]
+    }
 };
 exports.policies = policies;
+//# sourceMappingURL=policies.js.map

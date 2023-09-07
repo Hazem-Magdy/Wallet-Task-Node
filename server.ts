@@ -18,7 +18,10 @@ app.get('/', (_req, res) => {
 // Error Handling Middleware
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error(err.stack);
-  res.status(500).send('Something went wrong!');
+  //res.status(500).send('Something went wrong!');
+  if (!res.headersSent) {
+    res.status(500).json({ error: 'Something went wrong! from error middleware.........' });
+  }
 });
 
 app.listen(port, () => {

@@ -35,3 +35,4 @@ class Transaction extends ts_sequelize_models_1.sequelizeModel {
     }
 }
 exports.Transaction = Transaction;
+//# sourceMappingURL=transactions.js.map

@@ -22,6 +22,7 @@ const transactionService = new TransactionService_1.default(userRepository, tran
 function transfer(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            console.log("Enter transfer Callback function...............");
             const { senderMobile, receiverMobile, amount } = req.body;
             const senderUser = yield userRepository.getUserByMobileAsync(senderMobile);
             const receiverUser = yield userRepository.getUserByMobileAsync(receiverMobile);
@@ -33,9 +34,11 @@ function transfer(req, res) {
             }
             const transferSuccess = yield transactionService.transferBalance(senderUser, receiverUser, amount);
             if (transferSuccess) {
+                console.log('Balance transfer successful.');
                 return res.status(200).json({ message: 'Balance transfer successful.' });
             }
             else {
+                console.log('An error occurred during balance transfer.');
                 return res.status(500).json({ message: 'An error occurred during balance transfer.' });
             }
         }
@@ -46,3 +49,4 @@ function transfer(req, res) {
     });
 }
 exports.transfer = transfer;
+//# sourceMappingURL=walletController.js.map

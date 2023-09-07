@@ -17,3 +17,4 @@ router.use(`${webBaseUrl}/Wallet`, walletRoutes_1.default);
 router.use(`${webBaseUrl}/Admin`, adminRoutes_1.default);
 router.use(`${webBaseUrl}/Country`, countryRoutes_1.default);
 exports.default = router;
+//# sourceMappingURL=index.js.map

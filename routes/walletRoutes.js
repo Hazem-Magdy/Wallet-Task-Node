@@ -32,3 +32,4 @@ const walletController = __importStar(require("../controllers/walletController")
 // Transfer route
 router.post('/transfer', walletController.transfer);
 exports.default = router;
+//# sourceMappingURL=walletRoutes.js.map

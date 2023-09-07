@@ -32,3 +32,4 @@ const adminController = __importStar(require("../controllers/adminController"));
 // Balance report route
 router.get('/balance-report', adminController.getBalanceReport);
 exports.default = router;
+//# sourceMappingURL=adminRoutes.js.map

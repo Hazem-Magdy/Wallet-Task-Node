@@ -29,3 +29,4 @@ function getBalanceReport(req, res) {
     });
 }
 exports.getBalanceReport = getBalanceReport;
+//# sourceMappingURL=adminController.js.map

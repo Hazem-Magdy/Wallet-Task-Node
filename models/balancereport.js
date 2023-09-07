@@ -29,3 +29,4 @@ class BalanceReport extends ts_sequelize_models_1.sequelizeModel {
     }
 }
 exports.BalanceReport = BalanceReport;
+//# sourceMappingURL=balancereport.js.map

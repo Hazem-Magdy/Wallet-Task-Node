@@ -19,8 +19,12 @@ app.get('/', (_req, res) => {
 // Error Handling Middleware
 app.use((err, _req, res, _next) => {
     console.error(err.stack);
-    res.status(500).send('Something went wrong!');
+    //res.status(500).send('Something went wrong!');
+    if (!res.headersSent) {
+        res.status(500).json({ error: 'Something went wrong! from error middleware.........' });
+    }
 });
 app.listen(port, () => {
     console.log(`server is running on port ${port}................`);
 });
+//# sourceMappingURL=server.js.map
