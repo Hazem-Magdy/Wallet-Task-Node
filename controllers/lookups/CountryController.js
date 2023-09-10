@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CountryController = void 0;
-const DataBaseConnection_1 = require("../../Helpers/DataBaseConnection");
+const DataBaseConnection_1 = require("../../helpers/DataBaseConnection");
 class CountryController {
     // async getAllCountries(req: Request, res: Response) {
     //     let countries = await countryModel.findAll({ raw: true })

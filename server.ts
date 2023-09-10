@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import routes from './routes';
-import './Helpers/DataBaseConnection';
+import './helpers/DataBaseConnection';
 
 const app = express();
 const port = 6000;

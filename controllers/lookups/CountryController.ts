@@ -1,5 +1,5 @@
 import { Language } from "../../enums/language";
-import { countryModel } from "../../Helpers/DataBaseConnection";
+import { countryModel } from "../../helpers/DataBaseConnection";
 import { Request ,Response} from 'express'
 export class CountryController {
     // async getAllCountries(req: Request, res: Response) {

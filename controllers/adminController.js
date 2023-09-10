@@ -12,21 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBalanceReport = void 0;
-const AdminService_1 = __importDefault(require("../services/AdminService"));
-const { sequelize } = require("../Helpers/DataBaseConnection");
-const adminService = new AdminService_1.default(sequelize);
-function getBalanceReport(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const balanceReports = yield adminService.getBalanceReportAsync();
-            return res.status(200).json(balanceReports);
-        }
-        catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: 'An error occurred while fetching the balance report.' });
-        }
-    });
+const TransactionService_1 = __importDefault(require("../services/TransactionService"));
+class AdminController {
+    static generateBalanceReport(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const reportData = yield TransactionService_1.default.generateBalanceReport();
+                res.status(200).json(reportData);
+            }
+            catch (error) {
+                // Handle errors
+                res.status(500).json({ error: 'Internal server error' });
+            }
+        });
+    }
 }
-exports.getBalanceReport = getBalanceReport;
+exports.default = AdminController;
 //# sourceMappingURL=adminController.js.map

@@ -1,4 +1,4 @@
-const { transactionModel } = require("../Helpers/DataBaseConnection");
+import { transactionModel } from "../helpers/DataBaseConnection";
 
 class TransactionRepository {
   constructor() {}

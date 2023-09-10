@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const routes_1 = __importDefault(require("./routes"));
-require("./Helpers/DataBaseConnection");
+require("./helpers/DataBaseConnection");
 const app = (0, express_1.default)();
 const port = 6000;
 app.use(body_parser_1.default.urlencoded({ extended: true }));

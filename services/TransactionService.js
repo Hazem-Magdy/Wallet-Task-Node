@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const DataBaseConnection_1 = require("../helpers/DataBaseConnection");
 class TransactionService {
     constructor(userRepository, transactionRepository) {
         this.userRepository = userRepository;
@@ -23,10 +24,9 @@ class TransactionService {
                 senderUser.balance -= amount;
                 receiverUser.balance += amount;
                 const transactionRecord = {
-                    name: senderUser.name,
-                    mobile: senderUser.mobile,
+                    senderMobile: senderUser.mobile,
+                    receiverMobile: receiverUser.mobile,
                     balance: senderUser.balance,
-                    role: senderUser.role,
                 };
                 yield this.userRepository.beginTransactionAsync();
                 const updateSenderResult = yield this.userRepository.updateUserAsync(senderUser);
@@ -45,6 +45,26 @@ class TransactionService {
                 this.userRepository.rollbackTransaction();
                 console.error(error);
                 return false;
+            }
+        });
+    }
+    static generateBalanceReport() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const transactions = yield DataBaseConnection_1.transactionModel.findAll({
+                    attributes: ['id', 'senderMobile', 'receiverMobile', 'balance'],
+                });
+                // Format the data into the DTO
+                const reportData = transactions.map((transaction) => ({
+                    id: transaction.id,
+                    senderMobile: transaction.senderMobile,
+                    receiverMobile: transaction.receiverMobile,
+                    balance: transaction.balance,
+                }));
+                return reportData;
+            }
+            catch (error) {
+                throw new Error('Error generating transaction report');
             }
         });
     }

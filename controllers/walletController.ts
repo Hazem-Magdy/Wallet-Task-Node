@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { IUser } from '../Helpers/User-Interface';
+import { IUser } from '../interfaces/models/User-Interface';
 import UserRepository from '../repositories/UserRepository ';
 import TransactionRepository from '../repositories/TransactionRepository ';
 import TransactionService from '../services/TransactionService';

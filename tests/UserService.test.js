@@ -22,12 +22,12 @@ describe('UserService', () => {
     });
     it('should register a new user', () => __awaiter(void 0, void 0, void 0, function* () {
         sinon.stub(userService, "registerUser").returns(true);
-        const result = yield userService.registerUser('zzzzz', '01007756572', '0502349611@Hossam', 'User');
+        const result = yield userService.registerUser('zzzzz', '01007756572', '0502349611@Hossam');
         (0, chai_1.expect)(result).to.be.true;
     }));
     it('should not register a user with existing mobile', () => __awaiter(void 0, void 0, void 0, function* () {
         sinon.stub(userService, "registerUser").returns(false);
-        const result = yield userService.registerUser('Dina', '01009756572', '0502349611@Dina', 'User');
+        const result = yield userService.registerUser('Dina', '01009756572', '0502349611@Dina');
         (0, chai_1.expect)(result).to.be.false;
     }));
     it('should login a user with correct credentials', () => __awaiter(void 0, void 0, void 0, function* () {

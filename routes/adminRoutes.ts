@@ -1,9 +1,9 @@
 import express from 'express';
 const router = express.Router();
 
-import * as adminController from '../controllers/adminController';
+import adminController from '../controllers/adminController';
 
 // Balance report route
-router.get('/balance-report', adminController.getBalanceReport);
+router.get('/balance-report', adminController.generateBalanceReport);
 
 export default router;

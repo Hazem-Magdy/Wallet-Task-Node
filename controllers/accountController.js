@@ -14,7 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.register = exports.login = void 0;
 const AuthService_1 = __importDefault(require("../services/AuthService"));
+const UserRepository_1 = __importDefault(require("../repositories/UserRepository "));
 const authService = new AuthService_1.default();
+const userRepository = new UserRepository_1.default();
 function login(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -47,8 +49,16 @@ exports.login = login;
 function register(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { name, mobile, password, role } = req.body;
-            const registrationSuccess = yield authService.registerUser(name, mobile, password, role);
+            const { name, mobile, password } = req.body;
+            //check dublicated mobile number
+            const existUser = yield userRepository.getUserByMobileAsync(mobile);
+            if (existUser) {
+                return res.status(400).json({
+                    IsPass: false,
+                    Message: "Mobile number is already registered.",
+                });
+            }
+            const registrationSuccess = yield authService.registerUser(name, mobile, password);
             if (registrationSuccess) {
                 return res.status(200).json({
                     IsPass: true,
@@ -57,9 +67,9 @@ function register(req, res) {
                 });
             }
             else {
-                return res.status(400).json({
+                return res.status(500).json({
                     IsPass: false,
-                    Message: "Mobile number is already registered.",
+                    Message: "Failed to create an account.",
                 });
             }
         }

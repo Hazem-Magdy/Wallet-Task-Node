@@ -1,6 +1,6 @@
 import { Transaction } from "sequelize";
-import { IUser } from '../Helpers/User-Interface';
-const { sequelize, userModel } = require("../Helpers/DataBaseConnection");
+import { IUser } from '../interfaces/models/User-Interface';
+import { sequelize, userModel } from '../helpers/DataBaseConnection'
 
 class UserRepository {
   private _transaction: Transaction | null = null;

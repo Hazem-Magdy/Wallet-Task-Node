@@ -10,26 +10,14 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      name: { 
+      senderMobile: { 
         type: DataTypes.STRING,
-        validate: {
-          is: /^[a-zA-Z]+$/
-        }
       },
-      mobile: { 
+      receiverMobile: { 
         type: DataTypes.STRING,
-        validate: {
-          is: /^(\+20|0)?1\d{9}$/
-        }
       },
       balance: { 
         type: DataTypes.DECIMAL,
-        validate: {
-          min: 0
-        }
-      },
-      role: {
-        type: DataTypes.ENUM('Admin', 'User'),
       },
     });
   },

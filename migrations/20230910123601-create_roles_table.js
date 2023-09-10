@@ -4,25 +4,21 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     const { DataTypes } = Sequelize;
-    await queryInterface.createTable('BalanceReports', {
+    await queryInterface.createTable('Roles', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      userMombile: {
+      name: {
         type: DataTypes.STRING,
-      },
-      userName: {
-        type: DataTypes.STRING,
-      },
-      totalSentAmount: {
-        type: DataTypes.DECIMAL,
+        allowNull: false,
+        unique: true,
       },
     });
   },
 
   async down (queryInterface, Sequelize) {
-      await queryInterface.dropTable('BalanceReports');
+    await queryInterface.dropTable('Roles');
   }
 };

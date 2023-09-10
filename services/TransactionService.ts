@@ -1,6 +1,8 @@
-import { IUser } from '../Helpers/User-Interface';
+import { IUser } from '../interfaces/models/User-Interface';
 import UserRepository from '../repositories/UserRepository ';
 import TransactionRepository from '../repositories/TransactionRepository ';
+import { TransactionReportDTO } from '../dtos/TransactionReportDTO';
+import { transactionModel } from '../helpers/DataBaseConnection';
 
 class TransactionService {
   private userRepository: UserRepository;
@@ -21,10 +23,9 @@ class TransactionService {
       receiverUser.balance += amount;
 
       const transactionRecord = {
-        name: senderUser.name,
-        mobile: senderUser.mobile,
+        senderMobile: senderUser.mobile,
+        receiverMobile:receiverUser.mobile,
         balance: senderUser.balance,
-        role: senderUser.role,
       };
 
       await this.userRepository.beginTransactionAsync();
@@ -44,6 +45,25 @@ class TransactionService {
       this.userRepository.rollbackTransaction();
       console.error(error);
       return false; 
+    }
+  }
+  static async generateBalanceReport(): Promise<TransactionReportDTO[]> {
+    try {
+      const transactions = await transactionModel.findAll({
+        attributes: ['id', 'senderMobile', 'receiverMobile', 'balance'],
+      });
+
+      // Format the data into the DTO
+      const reportData: TransactionReportDTO[] = transactions.map((transaction) => ({
+        id: transaction.id,
+        senderMobile: transaction.senderMobile,
+        receiverMobile: transaction.receiverMobile,
+        balance: transaction.balance,
+      }));
+
+      return reportData;
+    } catch (error) {
+      throw new Error('Error generating transaction report');
     }
   }
 }

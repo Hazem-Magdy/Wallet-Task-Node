@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import AuthService from '../services/AuthService';
-
+import UserRepository from '../repositories/UserRepository '
 const authService = new AuthService();
+const userRepository = new UserRepository();
 
 async function login(req: Request, res: Response) {
   try {
@@ -32,9 +33,19 @@ async function login(req: Request, res: Response) {
 
 async function register(req: Request, res: Response) {
   try {
-    const { name, mobile, password, role } = req.body;
+    const { name, mobile, password } = req.body;
 
-    const registrationSuccess = await authService.registerUser(name, mobile, password, role);
+    //check dublicated mobile number
+    const existUser = await userRepository.getUserByMobileAsync(mobile);
+
+    if(existUser){
+      return res.status(400).json({
+        IsPass: false,
+        Message: "Mobile number is already registered.",
+      });
+    }
+
+    const registrationSuccess = await authService.registerUser(name, mobile, password);
 
     if (registrationSuccess) {
       return res.status(200).json({
@@ -43,9 +54,9 @@ async function register(req: Request, res: Response) {
         Data: `Account created successfully at ${new Date().toISOString()}`,
       });
     } else {
-      return res.status(400).json({
+      return res.status(500).json({
         IsPass: false,
-        Message: "Mobile number is already registered.",
+        Message: "Failed to create an account.",
       });
     }
   } catch (error) {

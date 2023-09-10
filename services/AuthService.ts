@@ -1,14 +1,16 @@
-import { IUser } from '../Helpers/User-Interface';
+import { IUser } from '../interfaces/models/User-Interface';
 import * as bcrypt from 'bcrypt';
 import * as jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+dotenv.config();
 import  UserRepository from '../repositories/UserRepository ';
-const { userModel } = require("../Helpers/DataBaseConnection");
+import { userModel } from '../helpers/DataBaseConnection'
 
 
 const userRepository = new UserRepository();
 
 class UserService {
-  async registerUser(name: string, mobile: string, password: string, role: string): Promise<boolean> {
+  async registerUser(name: string, mobile: string, password: string ): Promise<boolean> {
     try {
       const existingUser = await userRepository.getUserByMobileAsync(mobile);
 
@@ -22,7 +24,6 @@ class UserService {
         name,
         mobile,
         password: hashedPassword,
-        role,
         balance: 1000.0,
       };
 
@@ -37,7 +38,7 @@ class UserService {
 
   async loginUser(mobile: string, password: string): Promise<string | null> {
     try {
-      const user = await userModel.findOne({ where: { mobile } });
+      const user = await userRepository.getUserByMobileAsync(mobile);
 
       if (user && (await bcrypt.compare(password, user.password))) {
 
@@ -53,16 +54,12 @@ class UserService {
   }
   
   private generateToken(user: IUser): string {
-    const secretKey = "blalalalalala658998989"; 
-
+    const secretKey = process.env.SECRET_KEY!; 
+    console.log(secretKey);
     const userClaims: any[] = [
         { name: "Id", value: user.id },
-        { name: "jti", value: jwt.sign({ id: user.id }, secretKey) },
+        { name: "mobile", value: user.mobile }
     ];
-
-    if (user.role) {
-      userClaims.push({ name: "role", value: user.role });
-    }
 
     const token = jwt.sign({ claims: userClaims }, secretKey, {
       expiresIn: "8h",

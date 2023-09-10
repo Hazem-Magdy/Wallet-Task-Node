@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize';
 import{ Transaction } from '../models/transactions';
 import{ User } from '../models/user';
 import{ country } from '../models/country';
+import { Role } from '../models/role';
 
 const sequelize = new Sequelize("WalletDB", "postgres", "0502349611", {
   host: "localhost",
@@ -28,7 +29,13 @@ const countryModel = sequelize.define(
   new country().getOptions()
 );
 
-export { sequelize, transactionModel, userModel , countryModel };
+const roleModel = sequelize.define(
+  "Role",
+  new Role().getAttributes(sequelize.Sequelize),
+  new Role().getOptions()
+);
+
+export { sequelize, transactionModel, userModel , countryModel , roleModel};
 
 
 

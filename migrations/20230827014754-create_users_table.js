@@ -12,28 +12,16 @@ module.exports = {
       },
       name: { 
         type: DataTypes.STRING,
-        validate: {
-          is: /^[a-zA-Z]+$/
-        }
       },
       mobile: { 
         type: DataTypes.STRING,
-        validate: {
-          is: /^(\+20|0)?1\d{9}$/
-        }
       },
       balance: { 
         type: DataTypes.DECIMAL,
-        validate: {
-          min: 0
-        }
       },
       password: {
         type: DataTypes.STRING, 
         allowNull: false,
-      },
-      role: {
-        type: DataTypes.ENUM('Admin', 'User'),
       },
     });
   },

@@ -13,13 +13,13 @@ describe('UserService', () => {
   
   it('should register a new user', async () => {
     sinon.stub(userService , "registerUser").returns(true)
-    const result = await userService.registerUser('zzzzz', '01007756572', '0502349611@Hossam', 'User');
+    const result = await userService.registerUser('zzzzz', '01007756572', '0502349611@Hossam');
     expect(result).to.be.true;
   });
 
   it('should not register a user with existing mobile', async () => {
     sinon.stub(userService , "registerUser").returns(false)
-    const result = await userService.registerUser('Dina', '01009756572', '0502349611@Dina', 'User');
+    const result = await userService.registerUser('Dina', '01009756572', '0502349611@Dina');
     expect(result).to.be.false;
   });
 

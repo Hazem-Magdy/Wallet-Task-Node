@@ -9,13 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const { transactionModel } = require("../Helpers/DataBaseConnection");
+const DataBaseConnection_1 = require("../helpers/DataBaseConnection");
 class TransactionRepository {
     constructor() { }
     addTransactionAsync(transaction) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield transactionModel.create(transaction);
+                yield DataBaseConnection_1.transactionModel.create(transaction);
                 return true;
             }
             catch (error) {

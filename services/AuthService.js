@@ -37,11 +37,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt = __importStar(require("bcrypt"));
 const jwt = __importStar(require("jsonwebtoken"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const UserRepository_1 = __importDefault(require("../repositories/UserRepository "));
-const { userModel } = require("../Helpers/DataBaseConnection");
+const DataBaseConnection_1 = require("../helpers/DataBaseConnection");
 const userRepository = new UserRepository_1.default();
 class UserService {
-    registerUser(name, mobile, password, role) {
+    registerUser(name, mobile, password) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const existingUser = yield userRepository.getUserByMobileAsync(mobile);
@@ -53,10 +55,9 @@ class UserService {
                     name,
                     mobile,
                     password: hashedPassword,
-                    role,
                     balance: 1000.0,
                 };
-                const createdUser = yield userModel.create(newUser);
+                const createdUser = yield DataBaseConnection_1.userModel.create(newUser);
                 return !!createdUser;
             }
             catch (error) {
@@ -68,7 +69,7 @@ class UserService {
     loginUser(mobile, password) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield userModel.findOne({ where: { mobile } });
+                const user = yield userRepository.getUserByMobileAsync(mobile);
                 if (user && (yield bcrypt.compare(password, user.password))) {
                     const token = this.generateToken(user);
                     return token;
@@ -84,14 +85,12 @@ class UserService {
         });
     }
     generateToken(user) {
-        const secretKey = "blalalalalala658998989";
+        const secretKey = process.env.SECRET_KEY;
+        console.log(secretKey);
         const userClaims = [
             { name: "Id", value: user.id },
-            { name: "jti", value: jwt.sign({ id: user.id }, secretKey) },
+            { name: "mobile", value: user.mobile }
         ];
-        if (user.role) {
-            userClaims.push({ name: "role", value: user.role });
-        }
         const token = jwt.sign({ claims: userClaims }, secretKey, {
             expiresIn: "8h",
         });

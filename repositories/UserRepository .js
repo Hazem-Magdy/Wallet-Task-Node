@@ -9,19 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const { sequelize, userModel } = require("../Helpers/DataBaseConnection");
+const DataBaseConnection_1 = require("../helpers/DataBaseConnection");
 class UserRepository {
     constructor() {
         this._transaction = null;
     }
     getUserByIdAsync(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return userModel.findByPk(userId);
+            return DataBaseConnection_1.userModel.findByPk(userId);
         });
     }
     getUserByMobileAsync(mobile) {
         return __awaiter(this, void 0, void 0, function* () {
-            return userModel.findOne({ where: { mobile } });
+            return DataBaseConnection_1.userModel.findOne({ where: { mobile } });
         });
     }
     updateUserAsync(user) {
@@ -32,7 +32,7 @@ class UserRepository {
     }
     beginTransactionAsync() {
         return __awaiter(this, void 0, void 0, function* () {
-            this._transaction = yield sequelize.transaction();
+            this._transaction = yield DataBaseConnection_1.sequelize.transaction();
         });
     }
     commitTransactionAsync() {
