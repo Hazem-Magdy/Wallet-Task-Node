@@ -86,7 +86,6 @@ class UserService {
     }
     generateToken(user) {
         const secretKey = process.env.SECRET_KEY;
-        console.log(secretKey);
         const userClaims = [
             { name: "Id", value: user.id },
             { name: "mobile", value: user.mobile }

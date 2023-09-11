@@ -4,7 +4,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     const { DataTypes } = Sequelize;
-    await queryInterface.createTable('UserRoles', {
+    await queryInterface.createTable('UserActions', {
       userId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -17,6 +17,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('UserRoles');
+    await queryInterface.dropTable('UserActions');
   }
 };

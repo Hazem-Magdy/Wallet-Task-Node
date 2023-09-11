@@ -14,10 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isAuthorized = exports.isAuthenticated = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 const DataBaseConnection_1 = require("../helpers/DataBaseConnection");
 const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
         const authorizationHeader = req.get("authorization");
         if (!authorizationHeader) {
@@ -30,47 +29,54 @@ const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             return { isSuccess: false, message: "Invalid token" };
         }
         const userId = decodedToken.claims.find((claim) => claim.name === "Id").value;
-        const userRoles = yield DataBaseConnection_1.sequelize.query(`
-      SELECT r.name
-      FROM "UserRoles" ur
-      INNER JOIN "Roles" r ON ur."roleId" = r.id
-      WHERE ur."userId" = :userId
-      `, {
-            replacements: { userId },
-            type: DataBaseConnection_1.sequelize.QueryTypes.SELECT,
+        const userActions = yield DataBaseConnection_1.userActionsModel.findAll({
+            where: {
+                userId: userId,
+            },
+            include: [
+                {
+                    model: DataBaseConnection_1.actionModel,
+                    as: "userActions",
+                    attributes: ["name"],
+                },
+            ],
         });
-        const roleNames = [];
-        for (const userRole of userRoles) {
-            roleNames.push(userRole.name);
+        const actionNames = [];
+        for (const userAction of userActions) {
+            const actionName = (_b = (_a = userAction === null || userAction === void 0 ? void 0 : userAction.dataValues) === null || _a === void 0 ? void 0 : _a.userActions) === null || _b === void 0 ? void 0 : _b.name;
+            if (actionName) {
+                actionNames.push(actionName);
+            }
         }
-        req.userRoles = roleNames;
+        req.userActions = actionNames;
     }
     catch (error) {
+        console.log(error);
         return { isSuccess: false, message: error };
     }
 });
 exports.isAuthenticated = isAuthenticated;
-const isAuthorized = (requiredRole) => {
-    return (req, res, next) => {
-        const userRoles = req.userRoles;
-        if (!userRoles || userRoles.length === 0) {
-            // User has no roles, deny access
-            return {
-                isSuccess: false,
-                message: "Unauthorized: User has no roles.",
-            };
-        }
-        if (userRoles.includes(requiredRole)) {
-            return;
-        }
-        else {
-            // User is not authorized, deny access
-            return {
-                isSuccess: false,
-                message: "Unauthorized: User does not have the required role.",
-            };
-        }
-    };
+const isAuthorized = (req, res, next) => {
+    const userActions = req.userActions;
+    if (!userActions || userActions.length === 0) {
+        // User has no roles, deny access
+        return {
+            isSuccess: false,
+            message: "Unauthorized: User has no roles.",
+        };
+    }
+    const urlParts = req.url.split("/").filter((part) => part !== "");
+    const actionName = urlParts[1];
+    if (userActions.includes(actionName)) {
+        return;
+    }
+    else {
+        // User is not authorized, deny access
+        return {
+            isSuccess: false,
+            message: "Unauthorized: User does not have the required role.",
+        };
+    }
 };
 exports.isAuthorized = isAuthorized;
 // Type guard to check if the decoded token matches JwtPayload

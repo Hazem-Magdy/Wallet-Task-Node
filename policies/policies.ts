@@ -1,4 +1,3 @@
-//import {checkUser,testMiddleware1,testMiddleware2} from '../middlewares/authMiddleware';
 import { isAuthenticated ,isAuthorized } from '../middlewares/authMiddleware';
 import { Request, Response, NextFunction } from 'express';
 
@@ -17,13 +16,17 @@ const policies: Policies = {
     "*": [],
   },
   WalletController: {
-    //"*": [checkUser],
-    transfer: [isAuthenticated,isAuthorized("User"),],
+    "*": [],
+    transfer: [isAuthenticated,isAuthorized],
+  },
+  AdminController: {
+    "*": [],
+    "balance-report": [isAuthenticated,isAuthorized],
   },
   AccountController:{
-    //"*": [checkUser],
-    //login:[checkUser,testMiddleware1],
-    //register:[checkUser,testMiddleware1,testMiddleware2]
+    "*": [],
+    login:[],
+    register:[]
   }
 };
 

@@ -2,9 +2,10 @@ import { Sequelize } from 'sequelize';
 import{ Transaction } from '../models/transactions';
 import{ User } from '../models/user';
 import{ country } from '../models/country';
-import { Role } from '../models/role';
-import { UserRoles } from '../models/userRoles';
+import { Action } from '../models/action';
+import { UserActions } from '../models/userActions';
 
+const userActionsInstance = new UserActions();
 const sequelize = new Sequelize("WalletDB", "postgres", "0502349611", {
   host: "localhost",
   port: 5432,
@@ -30,19 +31,20 @@ const countryModel = sequelize.define(
   new country().getOptions()
 );
 
-const roleModel = sequelize.define(
-  "Role",
-  new Role().getAttributes(sequelize.Sequelize),
-  new Role().getOptions()
+const actionModel = sequelize.define(
+  "Action",
+  new Action().getAttributes(sequelize.Sequelize),
+  new Action().getOptions()
 );
 
-const userRolesModel = sequelize.define(
-  "UserRoles",
-  new UserRoles().getAttributes(sequelize.Sequelize),
-  new UserRoles().getOptions()
+const userActionsModel = sequelize.define(
+  "UserActions",
+  new UserActions().getAttributes(sequelize.Sequelize),
+  new UserActions().getOptions(),
 );
+new UserActions().associate();
 
-export { sequelize, transactionModel, userModel , countryModel , roleModel, userRolesModel };
+export { sequelize, transactionModel, userModel , countryModel , actionModel, userActionsModel };
 
 
 

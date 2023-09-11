@@ -1,20 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
-import { sequelize } from "../helpers/DataBaseConnection";
+import { actionModel,userActionsModel } from "../helpers/DataBaseConnection";
 
-type MiddlewareFunction = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => void;
+type MiddlewareFunction = (req: Request,res: Response,next: NextFunction) => void;
 
-export const isAuthenticated: MiddlewareFunction = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const isAuthenticated: MiddlewareFunction = async (req: Request,res: Response,next: NextFunction) => {
   try {
     const authorizationHeader = req.get("authorization");
 
@@ -35,55 +25,61 @@ export const isAuthenticated: MiddlewareFunction = async (
       (claim: { name: string; value: any }) => claim.name === "Id"
     ).value;
 
-    const userRoles = await sequelize.query(
-      `
-      SELECT r.name
-      FROM "UserRoles" ur
-      INNER JOIN "Roles" r ON ur."roleId" = r.id
-      WHERE ur."userId" = :userId
-      `,
-      {
-        replacements: { userId },
-        type: sequelize.QueryTypes.SELECT,
+    const userActions = await userActionsModel.findAll({
+      where: {
+        userId: userId,
+      },
+      include: [
+        {
+          model: actionModel,
+          as: "userActions",
+          attributes: ["name"],
+        },
+      ],
+    });
+
+    const actionNames = [];
+
+    for (const userAction of userActions) {
+      const actionName = userAction?.dataValues?.userActions?.name;
+      if (actionName) {
+        actionNames.push(actionName);
       }
-    );
-
-    const roleNames = [];
-
-    for (const userRole of userRoles) {
-      roleNames.push(userRole.name);
     }
 
-    req.userRoles = roleNames;
+    req.userActions = actionNames;
   } catch (error) {
+    console.log(error);
     return { isSuccess: false, message: error };
   }
 };
 
-export const isAuthorized: (requiredRole: string) => MiddlewareFunction = (
-  requiredRole
+export const isAuthorized: MiddlewareFunction = (
+  req: Request,
+  res: Response,
+  next: NextFunction
 ) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const userRoles = req.userRoles;
+  const userActions = req.userActions;
 
-    if (!userRoles || userRoles.length === 0) {
-      // User has no roles, deny access
-      return {
-        isSuccess: false,
-        message: "Unauthorized: User has no roles.",
-      };
-    }
-
-    if (userRoles.includes(requiredRole)) {
-      return;
-    } else {
-      // User is not authorized, deny access
-      return {
-        isSuccess: false,
-        message: "Unauthorized: User does not have the required role.",
-      };
-    }
-  };
+  if (!userActions || userActions.length === 0) {
+    // User has no roles, deny access
+    return {
+      isSuccess: false,
+      message: "Unauthorized: User has no roles.",
+    };
+  }
+  const urlParts = req.url.split("/").filter((part) => part !== "");
+  const actionName = urlParts[1];
+  
+  if (userActions.includes(actionName)) {
+    return;
+  } else {
+    // User is not authorized, deny access
+    return {
+      isSuccess: false,
+      message: "Unauthorized: User does not have the required role.",
+    };
+  }
 };
 
 // Type guard to check if the decoded token matches JwtPayload
