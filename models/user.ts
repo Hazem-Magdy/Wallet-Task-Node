@@ -1,6 +1,6 @@
 import { DefineAttributes, DataTypes, DefineOptions, Model } from 'sequelize';
 import { sequelizeModel } from 'ts-sequelize-models';
-import { userModel } from '../helpers/DataBaseConnection';
+import { roleModel, userModel } from '../helpers/DataBaseConnection';
 //import { roleModel } from '../Helpers/DataBaseConnection';
 
 export class User extends sequelizeModel {
@@ -57,13 +57,13 @@ export class User extends sequelizeModel {
     };
   }
 
-  // static associate(models: any): void {
-  //   // Define the association between User and Role
-  //   userModel.belongsTo(roleModel, {
-  //     foreignKey: 'roleId', 
-  //     onDelete: 'CASCADE',
-  //   });
-  // }
+  static associate(models: any): void {
+    // Define the association between User and Role
+    userModel.belongsTo(roleModel, {
+      foreignKey: 'roleId', 
+      onDelete: 'CASCADE',
+    });
+  }
 
   // static associate(models: any,userModel:Model<any, any>): void {
   //   userModel.belongsToMany(models.Role, {

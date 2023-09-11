@@ -1,4 +1,5 @@
-import {checkUser,testMiddleware1,testMiddleware2} from '../middlewares/authMiddleware';
+//import {checkUser,testMiddleware1,testMiddleware2} from '../middlewares/authMiddleware';
+import { isAuthenticated ,isAuthorized } from '../middlewares/authMiddleware';
 import { Request, Response, NextFunction } from 'express';
 
 type MiddlewareFunction = (req: Request, res: Response, next: NextFunction) => void;
@@ -13,11 +14,11 @@ type Policies = {
 
 const policies: Policies = {
   "*": {
-    //"*": [checkUser],
+    "*": [],
   },
   WalletController: {
     //"*": [checkUser],
-    //transfer: [checkUser,testMiddleware1,testMiddleware2],
+    transfer: [isAuthenticated,isAuthorized("User"),],
   },
   AccountController:{
     //"*": [checkUser],

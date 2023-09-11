@@ -1,6 +1,6 @@
-import { DefineAttributes, DataTypes, DefineOptions, Model } from 'sequelize';
-import { sequelizeModel } from 'ts-sequelize-models';
-
+import { DefineAttributes, DataTypes, DefineOptions, Model } from "sequelize";
+import { sequelizeModel } from "ts-sequelize-models";
+import { roleModel, userModel } from "../helpers/DataBaseConnection";
 export class Role extends sequelizeModel {
   getAttributes(DataTypes: DataTypes): DefineAttributes {
     return {
@@ -14,9 +14,11 @@ export class Role extends sequelizeModel {
         allowNull: false,
         unique: true,
         validate: {
-          isValidName: function (value:string) {
-            if (value !== 'Admin' && value !== 'User') {
-              throw new Error('Invalid role name. The name must be either "Admin" or "User".');
+          isValidName: function (value: string) {
+            if (value !== "Admin" && value !== "User") {
+              throw new Error(
+                'Invalid role name. The name must be either "Admin" or "User".'
+              );
             }
           },
         },
@@ -27,7 +29,7 @@ export class Role extends sequelizeModel {
   getOptions(): DefineOptions<any> {
     return {
       timestamps: false,
-      tableName: 'Roles',
+      tableName: "Roles",
     };
   }
 
@@ -46,5 +48,13 @@ export class Role extends sequelizeModel {
   //     onDelete: 'CASCADE',
   //   });
   // }
-  
+  static associate(models: any): void {
+    // Define the many-to-many association between Role and User
+    roleModel.belongsToMany(userModel, {
+      through: "UserRoles", // Specify the junction table
+      foreignKey: "roleId", // Foreign key in UserRoles that links to Role
+      otherKey: "userId", // Foreign key in UserRoles that links to User
+      as: 'Roles',
+    });
+  }
 }

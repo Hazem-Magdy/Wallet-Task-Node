@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const ts_sequelize_models_1 = require("ts-sequelize-models");
+const DataBaseConnection_1 = require("../helpers/DataBaseConnection");
 //import { roleModel } from '../Helpers/DataBaseConnection';
 class User extends ts_sequelize_models_1.sequelizeModel {
     getAttributes(DataTypes) {
@@ -53,6 +54,13 @@ class User extends ts_sequelize_models_1.sequelizeModel {
             timestamps: false,
             tableName: 'Users',
         };
+    }
+    static associate(models) {
+        // Define the association between User and Role
+        DataBaseConnection_1.userModel.belongsTo(DataBaseConnection_1.roleModel, {
+            foreignKey: 'roleId',
+            onDelete: 'CASCADE',
+        });
     }
 }
 exports.User = User;

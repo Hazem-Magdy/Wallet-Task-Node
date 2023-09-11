@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha --require ts-node/register test/UserService.test.ts",
+    "test": "nyc mocha --require ts-node/register tests/UserService.test.ts",
     "start": "ts-node src/server.ts",
     "migrate": "npx sequelize-cli db:migrate",
     "undo": "npx sequelize-cli db:migrate:undo",
