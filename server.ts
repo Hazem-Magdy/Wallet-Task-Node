@@ -2,14 +2,47 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import routes from './routes';
 import './helpers/DataBaseConnection';
+import cors from 'cors'
 import dotenv from "dotenv";
+const { LocalStorage } = require('node-localstorage');
+import * as path from 'path';
+import * as fs from 'fs';
+
+// Initialize the server-side local storage
+const localStorage = new LocalStorage('./localStorage');
+
+// Set data in local storage
+localStorage.setItem('language', 'fr');
+
+function translate(key: string, lang: string = 'ar'): string {
+  const preferredLang = localStorage.getItem('language') || lang;
+  const localesDir = path.join(__dirname, './locales');
+  const langFile = path.join(localesDir, `${preferredLang || lang}.json`);
+  
+  if (!fs.existsSync(langFile)) {
+    return `Translation for language '${lang}' not found`;
+  }
+
+  const translations = require(langFile);
+  return translations[key] || key;
+}
+
+console.log(translate("fatal_error"));
+
 dotenv.config();
 
 const app = express();
-const port = 6000;
+const port = 84;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(cors({
+  origin: 'http://localhost:4200',
+  methods: ['GET', 'POST','PUT','DELETE'], 
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 app.use(routes);
 
 // Home Page
